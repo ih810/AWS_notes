@@ -154,3 +154,30 @@ What is load balancing?
 	• Ability to specify a security policy to support older versions of SSL / TLS (legacy clients)
 ![[Screenshot 2024-04-16 at 3.35.12 PM.png]]
 
+## Server Name Indication (SNI) 
+• SNI solves the problem of loading multiple SSL certificates onto one web server (to serve multiple websites) 
+• It’s a “newer” protocol, and requires the client to indicate the hostname of the target server in the initial SSL handshake 
+• The server will then find the correct certificate, or return the default one Note: 
+• Only works for ALB & NLB (newer generation), CloudFront 
+• Does not work for CLB (older gen)
+![[Screenshot 2024-04-16 at 8.23.34 PM.png]]
+## Elastic Load Balancers – SSL Certificates 
+• Classic Load Balancer (v1) 
+	• Support only one SSL certificate 
+	• Must use multiple CLB for multiple hostname with multiple SSL certificates 
+• Application Load Balancer (v2) 
+	• Supports multiple listeners with multiple SSL certificates 
+	• Uses Server Name Indication (SNI) to make it work 
+• Network Load Balancer (v2) 
+	• Supports multiple listeners with multiple SSL certificates 
+	• Uses Server Name Indication (SNI) to make it work
+## Connection Draining 
+• Feature naming 
+	• Connection Draining – for CLB 
+	• Deregistration Delay – for ALB & NLB 
+• Time to complete “in-flight requests” while the instance is de-registering or unhealthy 
+• Stops sending new requests to the EC2 instance which is de-registering 
+• Between 1 to 3600 seconds (default: 300 seconds) • Can be disabled (set value to 0) 
+• Set to a low value if your requests are short
+![[Screenshot 2024-04-16 at 8.25.32 PM.png]]
+
